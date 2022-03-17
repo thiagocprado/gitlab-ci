@@ -1,3 +1,4 @@
+image: node # podemos utilizar imagens dockers personalizadas
 
 build-job: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
   stage: build
