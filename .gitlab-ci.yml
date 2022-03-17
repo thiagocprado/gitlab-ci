@@ -1,0 +1,6 @@
+construir site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
+  script:
+    - ls -ltra
+    - pwd
+    - whoami
+    - npm --version
