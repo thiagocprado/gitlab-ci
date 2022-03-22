@@ -7,7 +7,7 @@ stages: # caso não definamos os estágios, por padrão ele seguirá os 3 estág
 
 build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
   stage: build # especificamos que queros apenas o build
-  artifacts: 
+  artifacts: # podemos especificar pastas
     paths: 
       - ./website/build/missaodevops
   script: 
