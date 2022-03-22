@@ -1,7 +1,14 @@
 image: node # podemos utilizar imagens dockers personalizadas
 
-construir-site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
+build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
+
+  stages:
+    - build
+    - test
+    - deploy
+
   script: 
+    stage: build 
   - ls -ltra
   - pwd
   - whoami
