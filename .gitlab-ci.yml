@@ -28,6 +28,6 @@ build site: # job - define o bloco do pipeline - podem haver diversos jobs - cad
 
 deploy site: 
   stage: deploy
-  scripts: 
+  script: 
     - npm install -g surge
     - surge --project ./website/build/missaodevops/ --domain thiago.surge.sh
