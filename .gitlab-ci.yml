@@ -1,13 +1,20 @@
 image: node # podemos utilizar imagens dockers personalizadas
 
+# se colocarmos o cache ou o stages na raiz do yml, eles ficaram aplicados para todos os jobs
+
+# os estágiaos definem as etapas dos grupos de jobs
 stages: # caso não definamos os estágios, por padrão ele seguirá os 3 estágios abaixos 
   - build
   - test
   - deploy
 
+cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
+  paths:
+    - ./website/build
+
 build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
-  stage: build # especificamos que queros apenas o build
-  artifacts: # podemos especificar pastas
+  stage: build # especificamos que queros apenas o build, a ordem importa
+  artifacts: # os jobs podem produzir pastas ou diretórios - ex: nesse caso especificamos a pasta build que será gerada quando fizermos o build do projeto, após o build terminar teremos acesso a pasta gerada pelo gitlab
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME" # nome do artefato (estamos utilizando variaveis do gitlab)
     when: always # podemos especificar quando queremos executar o artefato
     expire_in: 2h20min # tempo que o artefato fica disponível
@@ -15,11 +22,12 @@ build site: # job - define o bloco do pipeline - podem haver diversos jobs - cad
       - ./website/build/missaodevops
 
   script: 
-  - ls -ltra
-  - pwd
-  - whoami
-  - npm --version
   - cd website
   - npm install
   - npm run build
 
+deploy site: 
+  stage: deploy
+  scripts: 
+    - npm install -g surge
+    - surge --project ./website/build/missaodevops/ --domain thiago.surge.sh
