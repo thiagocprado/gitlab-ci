@@ -1,14 +1,16 @@
 image: node # podemos utilizar imagens dockers personalizadas
 
+stages: # caso não definamos os estágios, por padrão ele seguirá os 3 estágios abaixos 
+  - build
+  - test
+  - deploy
+
 build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
-
-  stages:
-    - build
-    - test
-    - deploy
-
+  stage: build # especificamos que queros apenas o build
   script: 
-    stage: build 
+    artifacts: 
+      paths: 
+        - ./website/build/missaodevops
   - ls -ltra
   - pwd
   - whoami
