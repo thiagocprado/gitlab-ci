@@ -8,6 +8,7 @@ o que é o surge.sh
 o que é um gitlab runner?
 o que é um bullet?
 trunk based
+crawler
 
 primeiro passo é criar o arquivo gitlab-ci.yml
 

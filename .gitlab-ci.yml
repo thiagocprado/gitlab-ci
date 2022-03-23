@@ -19,7 +19,7 @@ before_script:
 test site:
   stage: test
   before_script: # antes de rodar o script, ele executará o comando abaixo
-    - npm install -g broken-link-checker wait-on
+    - npm install -g broken-link-checker@^0.7.8 wait-on@^2.1.0
 
   script:
     - cd website
