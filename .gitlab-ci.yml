@@ -12,6 +12,10 @@ cache: # podemos manter arquivos em cache, para não precisarmos repetir process
   paths:
     - ./website/build
 
+before_script:
+  - whoaim
+  - pwd
+
 build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
   stage: build # especificamos que queros apenas o build, a ordem importa
   artifacts: # os jobs podem produzir pastas ou diretórios - ex: nesse caso especificamos a pasta build que será gerada quando fizermos o build do projeto, após o build terminar teremos acesso a pasta gerada pelo gitlab
@@ -28,6 +32,15 @@ build site: # job - define o bloco do pipeline - podem haver diversos jobs - cad
 
 deploy site: 
   stage: deploy
-  script: 
+  before_script: # esse aqui sobrescreverá o de contexto global
     - npm install -g surge
+
+  script: 
     - surge --project ./website/build/missaodevops/ --domain thiago.surge.sh
+
+  after_script: # é executado mesmo se o script falhar 
+    - whoami
+
+  environment: # podemos nomear os nomes dos ambientes de acordo com o job
+    name: staging
+    url: http://thiago.surge.sh
