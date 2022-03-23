@@ -21,7 +21,7 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Curso de Devops', // Title for your website.
+  title: 'Este título foi alterado', // Title for your website.
   tagline: 'A website for devops',
   url: 'https://your-docusaurus-test-site.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
