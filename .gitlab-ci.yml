@@ -13,7 +13,7 @@ cache: # podemos manter arquivos em cache, para não precisarmos repetir process
     - ./website/build
 
 before_script:
-  - whoaim
+  - whoami
   - pwd
 
 build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
