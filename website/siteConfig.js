@@ -21,7 +21,7 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Curso de Devops', // Title for your website.
+  title: 'Este título foi alterado', // Title for your website.
   tagline: 'A website for devops',
   url: 'https://your-docusaurus-test-site.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
@@ -54,8 +54,8 @@ const siteConfig = {
 
   /* Colors for website */
   colors: {
-    primaryColor: '#59026f',
-    secondaryColor: '#3e014d',
+    primaryColor: '#ffffff', //'#59026f',
+    secondaryColor: '#FFBF00',
   },
 
   /* Custom fonts for website */
