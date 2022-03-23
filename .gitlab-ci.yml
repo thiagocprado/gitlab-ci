@@ -4,8 +4,8 @@ image: node # podemos utilizar imagens dockers personalizadas
 
 # os estágiaos definem as etapas dos grupos de jobs
 stages: # caso não definamos os estágios, por padrão ele seguirá os 3 estágios abaixos 
-  - build
   - test
+  - package
   - deploy
 
 cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
@@ -16,8 +16,19 @@ before_script:
   - whoami
   - pwd
 
-build site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
-  stage: build # especificamos que queros apenas o build, a ordem importa
+test site:
+  stage: test
+  before_script: # antes de rodar o script, ele executará o comando abaixo
+    - npm install -g broken-link-checker wait-on
+
+  script:
+    - cd website
+    - npm install && npm run start &
+    - wait-on http://localhost:3000/ --timeout 300000
+    - blc --recursive --exclude-external http://localhost:3000
+
+package site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único 
+  stage: package # especificamos que queros apenas o build, a ordem importa
   artifacts: # os jobs podem produzir pastas ou diretórios - ex: nesse caso especificamos a pasta build que será gerada quando fizermos o build do projeto, após o build terminar teremos acesso a pasta gerada pelo gitlab
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME" # nome do artefato (estamos utilizando variaveis do gitlab)
     when: always # podemos especificar quando queremos executar o artefato
@@ -30,7 +41,7 @@ build site: # job - define o bloco do pipeline - podem haver diversos jobs - cad
   - npm install
   - npm run build
 
-deploy site: 
+deploy to staging: 
   stage: deploy
   before_script: # esse aqui sobrescreverá o de contexto global
     - npm install -g surge

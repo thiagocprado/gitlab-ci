@@ -25,3 +25,7 @@ surge teardown - para remover o projeto
 surge --project build/missaodevops/
 surge --project build/missaodevops/ --domain thiago.surge.sh
 
+
+-- Broken Link Checker
+
+blc --recursive --exclude-external <url>
