@@ -47,9 +47,9 @@ package site: # job - define o bloco do pipeline - podem haver diversos jobs - c
 
 deploy to develop:
   stage: deploy
-  variables: 
-    - CNAME: develop-thiago.surge.sh
-    - GIT_STRATEGY: none # como já temos o build do site, não precisamos executar um fetch ou clone, ganhando tempo e espaço
+  variables:
+    CNAME: develop-thiago.surge.sh
+    GIT_STRATEGY: none # como já temos o build do site, não precisamos executar um fetch ou clone, ganhando tempo e espaço
   cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
     key: site-package
     policy: pull
@@ -67,13 +67,13 @@ deploy to develop:
 
 deploy to production:
   stage: deploy
-  variables: 
-    - CNAME: develop-thiago.surge.sh
-    - GIT_STRATEGY: none
-  cache: 
+  variables:
+    CNAME: develop-thiago.surge.sh
+    GIT_STRATEGY: none
+  cache:
     key: site-package
     policy: pull
-  before_script: 
+  before_script:
     - npm install -g surge
   script:
     - surge --project ./website/build/missaodevops/ --domain ${CNAME}
@@ -82,5 +82,5 @@ deploy to production:
   environment:
     name: staging
     url: http://${CNAME}
-  only: 
+  only:
     - master
