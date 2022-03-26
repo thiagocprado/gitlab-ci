@@ -19,7 +19,7 @@ test site:
   script:
     - cd website
     - npm install && npm run start &
-    - wait-on http://localhost:3000/ --timeout 300000
+    - wait-on http://localhost:3000/ --timeout 90000
     - blc --recursive --exclude-external http://localhost:3000
 
 vulnerabilities check:
@@ -48,7 +48,7 @@ package site: # job - define o bloco do pipeline - podem haver diversos jobs - c
 deploy to develop:
   stage: deploy
   variables:
-    CNAME: develop-thiago.surge.sh
+    CNAME: develop.thiago.surge.sh
     GIT_STRATEGY: none # como já temos o build do site, não precisamos executar um fetch ou clone, ganhando tempo e espaço
   cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
     key: site-package
@@ -60,27 +60,68 @@ deploy to develop:
   after_script: # é executado mesmo se o script falhar
     - whoami
   environment: # podemos nomear os nomes dos ambientes de acordo com o job
-    name: staging
+    name: develop
     url: http://${CNAME}
   only: # podemos definir condições para que um job seja executado, nesse caso colocamos para que ele apenes gere um build caso estejamos na branch develop
     - develop
 
-deploy to production:
+deploy to release: # vamos criar um job que cria um ambiente dinâmico, ou seja, assim que cumprir seu propósito ele será excluído
   stage: deploy
   variables:
-    CNAME: develop-thiago.surge.sh
+    CNAME: ${CI_COMMIT_REF_SLUG}.thiago.surge.sh
+    GIT_STRATEGY: none # como já temos o build do site, não precisamos executar um fetch ou clone, ganhando tempo e espaço
+  cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
+    key: site-package
+    policy: pull
+  before_script: # esse aqui sobrescreverá o de contexto global
+    - npm install -g surge@^0.20.1
+  script:
+    - surge --project ./website/build/missaodevops/ --domain ${CNAME}
+  after_script: # é executado mesmo se o script falhar
+    - whoami
+  environment: # podemos nomear os nomes dos ambientes de acordo com o job
+    name: review/${CI_COMMIT_REF_SLUG}
+    url: http://${CNAME}
+    on_stop: turnoff # irá chamar o job pra encerrar o ambiente
+  only: # podemos definir condições para que um job seja executado, nesse caso colocamos para que ele apenes gere um build caso estejamos na branch develop
+    - /^release-.*$/ # regex para pegarmos a branchd e release
+
+turnoff: # job que irá de fato encerrar o ambiente
+  stage: deploy
+  variables:
+    CNAME: ${CI_COMMIT_REF_SLUG}.thiago.surge.sh
     GIT_STRATEGY: none
   cache:
     key: site-package
     policy: pull
   before_script:
-    - npm install -g surge
+    - npm install -g surge@^0.20.1
+  script:
+    - surge teardown ${CNAME}
+  when: manual # um tipo de condição para execução de um job
+  environment:
+    name: review/${CI_COMMIT_REF_SLUG}
+    url: http://${CNAME}
+    action: stop # fecha o ambiente
+  only:
+    - /^release-.*$/
+
+deploy to production:
+  stage: deploy
+  variables:
+    CNAME: thiago.surge.sh
+    GIT_STRATEGY: none
+  cache:
+    key: site-package
+    policy: pull
+  before_script:
+    - npm install -g surge@^0.20.1
   script:
     - surge --project ./website/build/missaodevops/ --domain ${CNAME}
   after_script:
     - whoami
   environment:
-    name: staging
+    name: production
     url: http://${CNAME}
   only:
     - master
