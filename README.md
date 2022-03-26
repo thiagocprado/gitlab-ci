@@ -12,9 +12,9 @@ crawler
 
 primeiro passo é criar o arquivo gitlab-ci.yml
 
+-- Docusaurs -> Basicamente cria um site base para podermos customiza-lo
 
-
--- Surge
+-- Surge -> Permite que disponibilizemos nosso site em um servidor remoto 
 
 surge login - para logar
 surge logout - para deslogar
@@ -27,6 +27,8 @@ surge --project build/missaodevops/
 surge --project build/missaodevops/ --domain thiago.surge.sh
 
 
--- Broken Link Checker
+-- Broken Link Checker -> verifica se todos os links que possuimos no projeto são funcionais 
 
 blc --recursive --exclude-external <url>
+
+-- Snyk -> faz testes de vulnerabilidades
