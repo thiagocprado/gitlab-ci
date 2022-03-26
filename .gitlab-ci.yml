@@ -22,6 +22,11 @@ test site:
     - wait-on http://localhost:3000/ --timeout 300000
     - blc --recursive --exclude-external http://localhost:3000
 
+vulnerabilities check:
+  stage: test
+  script:
+    - cd website && npm install && npm run scan
+
 package site: # job - define o bloco do pipeline - podem haver diversos jobs - cada job deve ter um nome único
   stage: package # especificamos que queros apenas o build, a ordem importa
   cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
