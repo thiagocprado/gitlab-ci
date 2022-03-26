@@ -35,13 +35,12 @@ package site: # job - define o bloco do pipeline - podem haver diversos jobs - c
     expire_in: 2h20min # tempo que o artefato fica disponível
     paths:
       - ./website/build/missaodevops
-
   script:
     - cd website
     - npm install
     - npm run build
 
-deploy to staging:
+deploy to develop:
   stage: deploy
   cache: # podemos manter arquivos em cache, para não precisarmos repetir processos
     key: site-package
