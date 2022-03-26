@@ -82,9 +82,9 @@ deploy to release: # vamos criar um job que cria um ambiente dinâmico, ou seja,
   environment: # podemos nomear os nomes dos ambientes de acordo com o job
     name: review/${CI_COMMIT_REF_SLUG}
     url: http://${CNAME}
+    on_stop: turnoff # irá chamar o job pra encerrar o ambiente
   only: # podemos definir condições para que um job seja executado, nesse caso colocamos para que ele apenes gere um build caso estejamos na branch develop
     - /^release-.*$/ # regex para pegarmos a branchd e release
-  on_stop: turnoff # irá chamar o job pra encerrar o ambiente
 
 turnoff: # job que irá de fato encerrar o ambiente
   stage: deploy
